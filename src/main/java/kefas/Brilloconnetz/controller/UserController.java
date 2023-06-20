@@ -16,8 +16,8 @@ public class UserController {
 
     private final UserService userService;
 
-    @PostMapping("/signup")
-    public BaseResponse createUser(@RequestBody CreateUserRequest createUserRequest){
+    @PostMapping("/sign-up")
+    public BaseResponse signUp(@RequestBody CreateUserRequest createUserRequest) {
         return userService.signUp(createUserRequest);
     }
 }

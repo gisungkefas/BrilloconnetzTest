@@ -1,10 +1,7 @@
 package kefas.Brilloconnetz.dto;
 
-import lombok.Builder;
 import lombok.Data;
-
-import javax.validation.constraints.NotBlank;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class UserDetailsDto {
@@ -15,5 +12,5 @@ public class UserDetailsDto {
 
     private String password;
 
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
 }

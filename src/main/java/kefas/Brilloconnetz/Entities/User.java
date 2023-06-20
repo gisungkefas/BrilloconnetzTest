@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -21,7 +21,7 @@ public class User {
     private String username;
     private String email;
     private String password;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private String confirmationToken;
     private Boolean isActive;
 }

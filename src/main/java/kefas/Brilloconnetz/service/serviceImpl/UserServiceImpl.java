@@ -1,22 +1,25 @@
 package kefas.Brilloconnetz.service.serviceImpl;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import kefas.Brilloconnetz.Entities.User;
 import kefas.Brilloconnetz.Enum.ResponseCodeEnum;
-import kefas.Brilloconnetz.dto.UserDetailsDto;
 import kefas.Brilloconnetz.pojos.CreateUserRequest;
 import kefas.Brilloconnetz.repository.UserRepository;
 import kefas.Brilloconnetz.response.BaseResponse;
 import kefas.Brilloconnetz.security.JwtUtil;
 import kefas.Brilloconnetz.service.UserService;
 import kefas.Brilloconnetz.util.AppUtil;
-import kefas.Brilloconnetz.util.ResponseCodeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.time.LocalDate;
-import java.time.Period;
 
 @RequiredArgsConstructor
 @Service
@@ -32,27 +35,39 @@ public class UserServiceImpl implements UserService {
 
         LocalDate currentDate = LocalDate.now();
 
-        if (createUserRequest.getUsername().isEmpty()) {
-            return updateResponseData(response, ResponseCodeEnum.ERROR, "Username name cannot be empty.");
+        List<String> errorFields = new ArrayList<>();
+
+        String username = createUserRequest.getUsername();
+        if (username.isEmpty() || username.length() < 4) {
+            errorFields.add("Username: not empty, minimum 4 characters");
         }
 
-        if (!appUtil.validEmail(createUserRequest.getEmail())) {
-            return updateResponseData(response, ResponseCodeEnum.ERROR_EMAIL_INVALID);
+        String email = createUserRequest.getEmail();
+        if (email.isEmpty() || !appUtil.validEmail(email)) {
+            errorFields.add("Email: not empty, valid email address");
         }
 
-        if (createUserRequest.getPassword().isEmpty()) {
-            return updateResponseData(response, ResponseCodeEnum.ERROR, "Password cannot be empty.");
+        String password = createUserRequest.getPassword();
+        if (password.isEmpty() || !isStrongPassword(password)) {
+            errorFields.add("Password: not empty, strong password with at least 1 uppercase, 1 special character, 1 number, and minimum 8 characters");
         }
 
         LocalDate dateOfBirth = createUserRequest.getDateOfBirth();
-        if (dateOfBirth == null || Period.between(dateOfBirth, currentDate).getYears() < 16) {
-            return updateResponseData(response, ResponseCodeEnum.ERROR,
-                    "Date of birth must not be empty and user must be at least 16 years old.");
+        if (dateOfBirth == null || dateOfBirth.isAfter(currentDate.minusYears(16))) {
+            errorFields.add("Date of Birth: not empty, 16 years or greater");
         }
 
-        boolean isUserExists = userRepository.existsByEmail(createUserRequest.getEmail());
-        if (isUserExists) {
-            return updateResponseData(response, ResponseCodeEnum.ERROR_DUPLICATE_USER);
+        if (!errorFields.isEmpty()) {
+            String errorMessage = "Validation failed for the following fields:";
+            for (String errorField : errorFields) {
+                errorMessage += "\n" + errorField;
+            }
+            return updateResponseData(response, ResponseCodeEnum.ERROR, errorMessage);
+        }
+
+        boolean userExists = userRepository.existsByEmail(createUserRequest.getEmail());
+        if (userExists) {
+            return updateResponseData(response, ResponseCodeEnum.ERROR_DUPLICATE_USER, "User with the current Email already exists");
         }
 
         User newUser = new User();
@@ -65,12 +80,38 @@ public class UserServiceImpl implements UserService {
         newUser.setIsActive(false);
         newUser.setConfirmationToken(token);
 
-        return updateResponseData(response, ResponseCodeEnum.SUCCESS, "Token has been received");
+        String jwt = generateJwt(newUser);
+        return updateResponseData(response, ResponseCodeEnum.SUCCESS, jwt);
     }
 
     private BaseResponse updateResponseData(BaseResponse response, ResponseCodeEnum code, String message) {
         response.setCode(code.getCode());
-        response.setMessage(message);
+        response.setDescription(message);
         return response;
     }
+
+    private boolean isStrongPassword(String password) {
+        String passwordRegex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&*()_+!])(?=.*[a-zA-Z]).{8,}$";
+        return password.matches(passwordRegex);
+    }
+
+    private String generateJwt(User user) {
+        String username = user.getUsername();
+        String email = user.getEmail();
+
+        Claims claims = Jwts.claims().setSubject(username);
+        claims.put("email", email);
+
+        Instant expirationTime = Instant.now().plus(1, ChronoUnit.DAYS);
+
+        String jwt = Jwts.builder()
+                .setClaims(claims)
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(Date.from(expirationTime))
+                .signWith(SignatureAlgorithm.HS256, "yourSecretKey")  // Replace "yourSecretKey" with your actual secret key
+                .compact();
+
+        return jwt;
+    }
+
 }
