@@ -14,7 +14,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Entity {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
