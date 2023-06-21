@@ -22,6 +22,5 @@ public class User {
     private String email;
     private String password;
     private LocalDate dateOfBirth;
-    private String confirmationToken;
-    private Boolean isActive;
+
 }

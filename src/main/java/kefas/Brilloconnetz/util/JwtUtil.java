@@ -1,9 +1,7 @@
-package kefas.Brilloconnetz.security;
+package kefas.Brilloconnetz.util;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.security.core.userdetails.UserDetails;
+import io.jsonwebtoken.*;
+import kefas.Brilloconnetz.Entities.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -37,8 +35,12 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(User userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("username", userDetails.getUsername());
+        claims.put("email", userDetails.getEmail());
+        claims.put("password", userDetails.getPassword());
+        claims.put("dateOfBirth", userDetails.getDateOfBirth());
         return createToken(claims, userDetails.getUsername());
     }
     public String generateSignUpConfirmationToken(String email){
@@ -61,8 +63,29 @@ public class JwtUtil {
                 .signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
     }
 
-    public Boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    public String validateToken(String token, User userDetails) {
+        try {
+            Jws<Claims> claimsJws = Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token);
+            Claims claims = claimsJws.getBody();
+
+            if (!claims.get("username").equals(userDetails.getUsername())) {
+                return "Verification fails";
+            }
+            if (!claims.get("email").equals(userDetails.getEmail())) {
+                return "Verification fails";
+            }
+
+            if (!claims.get("password").equals(userDetails.getPassword())) {
+                return "Verification fails";
+            }
+
+            if (!claims.get("dateOfBirth").equals(userDetails.getDateOfBirth())) {
+                return "Verification fails";
+            }
+
+            return "Verification pass";
+        } catch (JwtException e) {
+            return "Verification fails";
+        }
     }
 }

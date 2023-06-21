@@ -1,8 +1,9 @@
 package kefas.Brilloconnetz.service;
 
+import kefas.Brilloconnetz.Entities.User;
 import kefas.Brilloconnetz.pojos.CreateUserRequest;
-import kefas.Brilloconnetz.response.BaseResponse;
+import org.springframework.http.ResponseEntity;
 
 public interface UserService {
-    BaseResponse signUp(CreateUserRequest createUserRequest);
+    ResponseEntity<?> signUp(CreateUserRequest createUserRequest);
 }
