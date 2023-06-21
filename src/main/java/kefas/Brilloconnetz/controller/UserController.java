@@ -20,7 +20,4 @@ public class UserController {
     public ResponseEntity<?> signUp(@RequestBody CreateUserRequest createUserRequest) {
         return userService.signUp(createUserRequest);
     }
-
-//    @PostMapping("/verify-token")
-//    public
 }

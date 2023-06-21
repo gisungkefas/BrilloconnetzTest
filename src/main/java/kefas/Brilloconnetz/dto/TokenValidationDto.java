@@ -8,5 +8,4 @@ public class TokenValidationDto {
 
     private String token;
     private User userDetails;
-
 }

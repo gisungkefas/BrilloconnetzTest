@@ -9,12 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.util.*;
 import java.time.LocalDate;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
 @Service
@@ -75,16 +73,6 @@ public class UserServiceImpl implements UserService {
 
         String jwtToken = jwtUtil.generateToken(newUser);
         return new ResponseEntity<>(jwtToken, HttpStatus.OK);
-    }
-
-    @Override
-    public String validateToken(String token, User userDetails) {
-        String validationResult = jwtUtil.validateToken(token, userDetails);
-        if (validationResult.equals("Verification pass")) {
-            return "Verification pass";
-        } else {
-            return "Verification fails";
-        }
     }
 
     private boolean isStrongPassword(String password) {
