@@ -2,6 +2,7 @@ package kefas.Brilloconnetz.util;
 
 import io.jsonwebtoken.*;
 import kefas.Brilloconnetz.Entities.User;
+import kefas.Brilloconnetz.pojos.CreateUserRequest;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class JwtUtil {
     }
 
 
-    public String generateToken(User userDetails) {
+    public String generateToken(CreateUserRequest userDetails) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("username", userDetails.getUsername());
         claims.put("email", userDetails.getEmail());

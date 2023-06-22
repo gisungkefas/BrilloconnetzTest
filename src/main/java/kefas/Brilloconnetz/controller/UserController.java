@@ -1,5 +1,6 @@
 package kefas.Brilloconnetz.controller;
 
+import jakarta.validation.Valid;
 import kefas.Brilloconnetz.pojos.CreateUserRequest;
 import kefas.Brilloconnetz.service.UserService;
 import lombok.AllArgsConstructor;
@@ -17,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<?> signUp(@RequestBody CreateUserRequest createUserRequest) {
+    public ResponseEntity<?> signUp(@Valid @RequestBody CreateUserRequest createUserRequest) {
         return userService.signUp(createUserRequest);
     }
 }

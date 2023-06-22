@@ -1,5 +1,6 @@
 package kefas.Brilloconnetz.Entities;
 
+import kefas.Brilloconnetz.pojos.CreateUserRequest;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,5 +13,5 @@ import lombok.Setter;
 public class TokenValidation {
 
     private String token;
-    private User userDetails;
+    private String username;
 }

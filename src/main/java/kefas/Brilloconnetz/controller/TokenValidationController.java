@@ -1,6 +1,5 @@
 package kefas.Brilloconnetz.controller;
 
-import kefas.Brilloconnetz.Entities.User;
 import kefas.Brilloconnetz.service.TokenValidationService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +12,7 @@ public class TokenValidationController {
     private final TokenValidationService tokenValidationService;
 
     @PostMapping("/verify-token")
-    public String validateToken(@RequestBody String token,@RequestBody User userDetails){
-        return tokenValidationService.validateToken(token, userDetails);
+    public String validateToken(@RequestParam(name = "token") String token, @RequestParam(name = "username") String username){
+        return tokenValidationService.validateToken(token, username);
     }
 }
