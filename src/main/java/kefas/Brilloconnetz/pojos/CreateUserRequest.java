@@ -1,5 +1,6 @@
 package kefas.Brilloconnetz.pojos;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import kefas.Brilloconnetz.anotations.MinAge;
 import lombok.AllArgsConstructor;
@@ -20,8 +21,10 @@ public class CreateUserRequest {
     @Email(message = "Not a valid Email")
     private String email;
 
+    @Schema(example = "string")
     @NotBlank(message = "Password cannot be empty")
-    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&*()_+!])(?=.*[a-zA-Z]).{8,}$", message = "Invalid password format. Date should be in yyyy-MM-dd format.")
+    @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@#$%^&*()_+!])(?=.*[a-zA-Z]).{8,}$",
+            message = "Invalid password format. Password should contain at least Uppercase(A-Z), Lowercase(a-z), Special Character(/?.@!#$#% etc) and a Number(0-9)")
     private String password;
 
     @NotNull(message = "Date of birth cannot be empty")

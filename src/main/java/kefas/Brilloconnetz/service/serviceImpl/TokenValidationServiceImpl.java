@@ -1,8 +1,6 @@
 package kefas.Brilloconnetz.service.serviceImpl;
 
-import kefas.Brilloconnetz.Entities.User;
 import kefas.Brilloconnetz.service.TokenValidationService;
-import kefas.Brilloconnetz.util.JwtUtil;
 import kefas.Brilloconnetz.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
