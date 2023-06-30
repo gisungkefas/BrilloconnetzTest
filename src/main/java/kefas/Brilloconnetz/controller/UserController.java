@@ -1,7 +1,7 @@
 package kefas.Brilloconnetz.controller;
 
 import jakarta.validation.Valid;
-import kefas.Brilloconnetz.pojos.CreateUserRequest;
+import kefas.Brilloconnetz.pojos.request.CreateUserRequest;
 import kefas.Brilloconnetz.service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;

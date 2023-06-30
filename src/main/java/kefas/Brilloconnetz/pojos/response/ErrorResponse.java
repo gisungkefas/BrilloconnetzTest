@@ -1,4 +1,4 @@
-package kefas.Brilloconnetz.dto;
+package kefas.Brilloconnetz.pojos.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

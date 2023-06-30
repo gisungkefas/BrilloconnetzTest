@@ -1,4 +1,4 @@
-package kefas.Brilloconnetz.pojos;
+package kefas.Brilloconnetz.pojos.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;

@@ -1,6 +1,6 @@
 package kefas.Brilloconnetz.service;
 
-import kefas.Brilloconnetz.pojos.CreateUserRequest;
+import kefas.Brilloconnetz.pojos.request.CreateUserRequest;
 import org.springframework.http.ResponseEntity;
 
 public interface UserService {

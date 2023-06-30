@@ -1,6 +1,6 @@
 package kefas.Brilloconnetz.service.serviceImpl;
 
-import kefas.Brilloconnetz.pojos.CreateUserRequest;
+import kefas.Brilloconnetz.pojos.request.CreateUserRequest;
 import kefas.Brilloconnetz.service.UserService;
 import kefas.Brilloconnetz.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
